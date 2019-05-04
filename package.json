@@ -1,0 +1,22 @@
+{
+  "name": "gulag-bot",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sirikon/gulag-bot.git"
+  },
+  "author": "Sirikon <hello@sirikon.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sirikon/gulag-bot/issues"
+  },
+  "homepage": "https://github.com/Sirikon/gulag-bot#readme",
+  "dependencies": {
+    "telegraf": "^3.29.0"
+  }
+}

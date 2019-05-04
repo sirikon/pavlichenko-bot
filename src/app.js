@@ -1,6 +1,7 @@
 const Telegraf = require('telegraf');
 
 const floodFeature = require('./features/flood');
+const autoreplyFeature = require('./features/autoreply');
 
 module.exports = () => {
   const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -13,9 +14,7 @@ module.exports = () => {
   bot.help(ctx => ctx.reply('You make me laugh. Go to gulag.'));
 
   floodFeature(bot);
-
-  bot.hears('OwO', (ctx) => ctx.reply('UwU'));
-  bot.hears('shrug', (ctx) => ctx.reply('¯\\_(ツ)_/¯'));
+  autoreplyFeature(bot);
 
   bot.launch()
     .then(() => {

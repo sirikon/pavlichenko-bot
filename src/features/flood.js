@@ -22,7 +22,7 @@ async function floodCommandHandler(ctx) {
   const repliedUser = getRepliedUser(ctx);
   if (!repliedUser) return;
   configDatabase.floodControlUser(repliedUser.id, true);
-  ctx.reply(`User ${(repliedUser.first_name || repliedUser.username || repliedUser.id)} added to flood control.`);
+  ctx.reply(`${(repliedUser.first_name || repliedUser.username || repliedUser.id)}, se te ha enviado al Gulag por incumplimiento de las normas sobre el abuso de flood. Tienes restrigidos tus mensajes a 50 diarios. Úsalos bien.`);
 }
 
 async function unfloodCommandHandler(ctx) {
@@ -30,7 +30,7 @@ async function unfloodCommandHandler(ctx) {
   const repliedUser = getRepliedUser(ctx);
   if (!repliedUser) return;
   configDatabase.floodControlUser(repliedUser.id, false);
-  ctx.reply(`User ${(repliedUser.first_name || repliedUser.username || repliedUser.id)} removed from flood control.`);
+  ctx.reply(`${(repliedUser.first_name || repliedUser.username || repliedUser.id)}, enhorabuena, saliste del gulag.`);
 }
 
 async function messageHandler(ctx, next) {

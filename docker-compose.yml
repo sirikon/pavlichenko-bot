@@ -4,6 +4,7 @@ services:
 
   gulagbot:
     image: gulagbot
+    restart: always
     build:
       context: .
     environment:

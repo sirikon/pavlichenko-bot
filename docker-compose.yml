@@ -9,3 +9,6 @@ services:
       context: .
     environment:
       - BOT_TOKEN=${BOT_TOKEN}
+      - DATA_FOLDER=/data
+    volumes:
+      - "./data:/data"

@@ -45,8 +45,18 @@ module.exports = (timeProvider, config) => {
     state = { users: [] };
   }
 
+  function getState() {
+    return state;
+  }
+
+  function setState(newState) {
+    state = newState;
+  }
+
   return {
     addMessageAndCheck,
     reset,
+    getState,
+    setState,
   };
 };

@@ -63,3 +63,5 @@ typings/
 # Custom
 /.vscode/
 /.env
+/data.json
+/data

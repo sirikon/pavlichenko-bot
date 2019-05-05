@@ -1,4 +1,4 @@
-const state = {
+let state = {
   floodControl: {
     users: [],
     limit: 10,
@@ -22,8 +22,18 @@ module.exports = () => {
     return state.floodControl.users.indexOf(userId) >= 0;
   }
 
+  function getState() {
+    return state;
+  }
+
+  function setState(newState) {
+    state = newState;
+  }
+
   return {
     floodControlUser,
     isUserInFloodControl,
+    getState,
+    setState,
   };
 };

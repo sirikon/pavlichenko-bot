@@ -73,9 +73,20 @@ module.exports = (rootState, timeProvider) => {
     return state.users.indexOf(userId) >= 0;
   }
 
+  function getStatus() {
+    const state = getState();
+    const result = {};
+    state.users.forEach((userId) => {
+      deleteOutOfWindowMessagesFromUserStack(userId);
+      result[userId] = `${getUserMessageStack(userId).length}/${state.config.limit}`;
+    });
+    return result;
+  }
+
   return {
     addMessageAndCheck,
     flagUserAsFlooder,
     isUserFlooder,
+    getStatus,
   };
 };

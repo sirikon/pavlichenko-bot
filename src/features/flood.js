@@ -28,6 +28,25 @@ module.exports = (bot, floodService) => {
     ctx.reply(`${userMention(repliedUser)}, enhorabuena, saliste del gulag.`);
   }
 
+  async function floodStatusCommandHandler(ctx) {
+    if (!await shared.senderIsAdmin(ctx)) return;
+    const status = floodService.getStatus();
+    if (Object.keys(status).length === 0) {
+      ctx.reply('El gulag está vacío :(');
+      return;
+    }
+    const userPromises = [];
+    Object.keys(status).forEach((userId) => {
+      userPromises.push(ctx.telegram.getChatMember(ctx.chat.id, userId));
+    });
+    const userResults = await Promise.all(userPromises);
+    const text = [];
+    userResults.forEach((result) => {
+      text.push(`${userMention(result.user)}: ${status[result.user.id]}`);
+    });
+    ctx.reply(text.join('\n'));
+  }
+
   async function messageHandler(ctx, next) {
     if (ctx.message.from.is_bot) return next(ctx);
     const userId = ctx.message.from.id;
@@ -38,5 +57,6 @@ module.exports = (bot, floodService) => {
 
   bot.command('flood', floodCommandHandler);
   bot.command('unflood', unfloodCommandHandler);
+  bot.command('flood_status', floodStatusCommandHandler);
   bot.on('message', messageHandler);
 };

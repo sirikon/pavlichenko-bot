@@ -1,6 +1,6 @@
 const shared = require('./shared');
 
-module.exports = (bot, floodService) => {
+module.exports = (bot) => {
   const userMention = user => user.first_name || user.username || user.id;
 
   function getRepliedUser(ctx) {
@@ -14,7 +14,7 @@ module.exports = (bot, floodService) => {
     const repliedUser = getRepliedUser(ctx);
     if (!repliedUser) return;
 
-    floodService.flagUserAsFlooder(repliedUser.id, true);
+    ctx.floodService.flagUserAsFlooder(repliedUser.id, true);
     ctx.reply(`${userMention(repliedUser)}, se te ha enviado al Gulag por incumplimiento de las normas sobre el abuso de flood. Tienes restrigidos tus mensajes a 50 diarios. Úsalos bien.`);
   }
 
@@ -24,13 +24,13 @@ module.exports = (bot, floodService) => {
     const repliedUser = getRepliedUser(ctx);
     if (!repliedUser) return;
 
-    floodService.flagUserAsFlooder(repliedUser.id, false);
+    ctx.floodService.flagUserAsFlooder(repliedUser.id, false);
     ctx.reply(`${userMention(repliedUser)}, enhorabuena, saliste del gulag.`);
   }
 
   async function floodStatusCommandHandler(ctx) {
     if (!await shared.senderIsAdmin(ctx)) return;
-    const status = floodService.getStatus();
+    const status = ctx.floodService.getStatus();
     if (Object.keys(status).length === 0) {
       ctx.reply('El gulag está vacío :(');
       return;
@@ -50,8 +50,8 @@ module.exports = (bot, floodService) => {
   async function messageHandler(ctx, next) {
     if (ctx.message.from.is_bot) return next(ctx);
     const userId = ctx.message.from.id;
-    if (!floodService.isUserFlooder(userId)) return next(ctx);
-    if (floodService.addMessageAndCheck(userId)) return next(ctx);
+    if (!ctx.floodService.isUserFlooder(userId)) return next(ctx);
+    if (ctx.floodService.addMessageAndCheck(userId)) return next(ctx);
     return ctx.telegram.deleteMessage(ctx.chat.id, ctx.message.message_id);
   }
 

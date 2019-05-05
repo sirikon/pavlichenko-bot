@@ -16,7 +16,7 @@ module.exports = (timeProvider, config) => {
     let finished = false;
     let c = 0;
     while (!finished) {
-      if (((now - userStack[c]) < config.window) || c === userStack.length - 1) {
+      if (((now - userStack[c]) < config.window) || c === userStack.length) {
         finished = true;
         continue;
       }

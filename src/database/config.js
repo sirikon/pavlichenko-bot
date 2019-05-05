@@ -22,6 +22,13 @@ module.exports = () => {
     return state.floodControl.users.indexOf(userId) >= 0;
   }
 
+  function getLimitAndWindow() {
+    return {
+      limit: state.floodControl.limit,
+      window: state.floodControl.window
+    }
+  }
+
   function getState() {
     return state;
   }
@@ -35,5 +42,6 @@ module.exports = () => {
     isUserInFloodControl,
     getState,
     setState,
+    getLimitAndWindow,
   };
 };

@@ -5,7 +5,9 @@ const autoreplyFeature = require('./features/autoreply');
 
 const persistence = require('./database/persistence')();
 
-module.exports = () => {
+module.exports = async () => {
+  await persistence.read();
+
   const bot = new Telegraf(process.env.BOT_TOKEN);
 
   bot.catch((err) => {
@@ -18,19 +20,13 @@ module.exports = () => {
   floodFeature(bot);
   autoreplyFeature(bot);
 
-  persistence.read()
-    .then(() => bot.launch())
-    .then(() => {
-      console.log('Running');
+  await bot.launch();
+  console.log('Running');
 
-      setInterval(() => {
-        persistence.write()
-          .then(() => {}, (err) => {
-            console.log(err);
-          });
-      }, 60 * 1000);
-
-    }, (err) => {
-      console.log(err);
-    });
+  setInterval(() => {
+    persistence.write()
+      .then(() => {}, (err) => {
+        console.log(err);
+      });
+  }, 60 * 1000);
 };

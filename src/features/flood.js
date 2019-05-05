@@ -1,12 +1,7 @@
+const shared = require('./shared');
+
 module.exports = (bot, floodService) => {
   const userMention = user => user.first_name || user.username || user.id;
-
-  async function senderIsAdmin(ctx) {
-    const admins = await ctx.telegram.getChatAdministrators(ctx.chat.id);
-    return admins
-      .filter(a => a.user.id === ctx.message.from.id)
-      .length > 0;
-  }
 
   function getRepliedUser(ctx) {
     if (!ctx.message.reply_to_message) return null;
@@ -14,7 +9,7 @@ module.exports = (bot, floodService) => {
   }
 
   async function floodCommandHandler(ctx) {
-    if (!await senderIsAdmin(ctx)) return;
+    if (!await shared.senderIsAdmin(ctx)) return;
 
     const repliedUser = getRepliedUser(ctx);
     if (!repliedUser) return;
@@ -24,7 +19,7 @@ module.exports = (bot, floodService) => {
   }
 
   async function unfloodCommandHandler(ctx) {
-    if (!await senderIsAdmin(ctx)) return;
+    if (!await shared.senderIsAdmin(ctx)) return;
 
     const repliedUser = getRepliedUser(ctx);
     if (!repliedUser) return;

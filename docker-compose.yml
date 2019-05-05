@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+
+  gulagbot:
+    image: gulagbot
+    build:
+      context: .
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}

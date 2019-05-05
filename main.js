@@ -1,2 +1,2 @@
 require('./src/app')()
-    .then(() => {}, (err) => console.log(err));
+  .then(() => {}, err => console.log(err));

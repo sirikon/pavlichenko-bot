@@ -1,19 +1,20 @@
 class MockBot {
-    constructor() {
-        this.commands = {}
-        this.eventHandlers = {}
-    }
+  constructor() {
+    this.commands = {};
+    this.eventHandlers = {};
+  }
 
-    command(name, callback) {
-        this.commands[name] = callback;
-    }
-    runCommand(name, ctx) {
-        return this.commands[name](ctx);
-    }
+  command(name, callback) {
+    this.commands[name] = callback;
+  }
 
-    on(event, callback) {
-        this.eventHandlers[event] = callback;
-    }
+  runCommand(name, ctx) {
+    return this.commands[name](ctx);
+  }
+
+  on(event, callback) {
+    this.eventHandlers[event] = callback;
+  }
 }
 
 module.exports = MockBot;

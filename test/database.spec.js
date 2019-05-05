@@ -1,53 +1,62 @@
-// const assert = require('assert');
+const assert = require('assert');
 
-// const floodDatabase = require('../src/database/flood');
+const FloodService = require('../src/services/floodService');
 
-// const databaseConfig = {
-//   limit: 10,
-//   window: 60,
-// };
+function buildState(limit, window) {
+  return {
+    flood: {
+      users: [],
+      messageStacks: {},
+      config: {
+        limit,
+        window,
+      },
+    },
+  };
+}
 
-// describe('Database', () => {
-//   describe('Flood', () => {
-//     beforeEach(() => floodDatabase(() => 1, databaseConfig).reset());
+describe('Database', () => {
+  describe('Flood', () => {
+    it('should accept a single message', () => {
+      const sut = FloodService(buildState(10, 60), () => 1);
+      assert.equal(sut.addMessageAndCheck(1), true);
+    });
 
-//     it('should accept a single message', () => {
-//       const db = floodDatabase(() => 1, databaseConfig);
-//       assert.equal(db.addMessageAndCheck(1), true);
-//     });
+    it('should accept exactly the message limit', () => {
+      const state = buildState(10, 60);
+      const sut = FloodService(state, () => 1);
+      for (let i = 0; i < state.flood.config.limit; i++) {
+        assert.equal(sut.addMessageAndCheck(1), true);
+      }
+    });
 
-//     it('should accept exactly the message limit', () => {
-//       const db = floodDatabase(() => 1, databaseConfig);
-//       for (let i = 0; i < databaseConfig.limit; i++) {
-//         assert.equal(db.addMessageAndCheck(1), true);
-//       }
-//     });
+    it('should accept exactly the message limit, then reject the next one', () => {
+      const state = buildState(10, 60);
+      const sut = FloodService(state, () => 1);
+      for (let i = 0; i < state.flood.config.limit; i++) {
+        assert.equal(sut.addMessageAndCheck(1), true);
+      }
+      assert.equal(sut.addMessageAndCheck(1), false);
+    });
 
-//     it('should accept exactly the message limit, then reject the next one', () => {
-//       const db = floodDatabase(() => 1, databaseConfig);
-//       for (let i = 0; i < databaseConfig.limit; i++) {
-//         assert.equal(db.addMessageAndCheck(1), true);
-//       }
-//       assert.equal(db.addMessageAndCheck(1), false);
-//     });
+    it('should accept exactly the message limit (one), then reject the next one', () => {
+      const state = buildState(1, 60);
+      const sut = FloodService(state, () => 1);
+      for (let i = 0; i < state.flood.config.limit; i++) {
+        assert.equal(sut.addMessageAndCheck(1), true);
+      }
+      assert.equal(sut.addMessageAndCheck(1), false);
+    });
 
-//     it('should accept exactly the message limit (one), then reject the next one', () => {
-//       const internalConfig = { limit: 1, window: 60 };
-//       const db = floodDatabase(() => 1, internalConfig);
-//       for (let i = 0; i < internalConfig.limit; i++) {
-//         assert.equal(db.addMessageAndCheck(1), true);
-//       }
-//       assert.equal(db.addMessageAndCheck(1), false);
-//     });
-
-//     it('should accept exactly the message limit, reject the next one, and accept it once the window passed', () => {
-//       const db = floodDatabase(() => 1, databaseConfig);
-//       for (let i = 0; i < databaseConfig.limit; i++) {
-//         assert.equal(db.addMessageAndCheck(1), true);
-//       }
-//       assert.equal(db.addMessageAndCheck(1), false);
-//       const db2 = floodDatabase(() => 61, databaseConfig);
-//       assert.equal(db2.addMessageAndCheck(1), true);
-//     });
-//   });
-// });
+    it('should accept exactly the message limit, reject the next one, and accept it once the window passed', () => {
+      const state = buildState(10, 60);
+      const sut = FloodService(state, () => 1);
+      for (let i = 0; i < state.flood.config.limit; i++) {
+        assert.equal(sut.addMessageAndCheck(1), true);
+      }
+      assert.equal(sut.addMessageAndCheck(1), false);
+      const sut2 = FloodService(state, () => 61);
+      assert.equal(sut2.addMessageAndCheck(1), true);
+    });
+  });
+});

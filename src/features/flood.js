@@ -55,8 +55,8 @@ module.exports = (bot) => {
     return ctx.telegram.deleteMessage(ctx.chat.id, ctx.message.message_id);
   }
 
+  bot.on('message', messageHandler);
   bot.command('flood', floodCommandHandler);
   bot.command('unflood', unfloodCommandHandler);
   bot.command('flood_status', floodStatusCommandHandler);
-  bot.on('message', messageHandler);
 };

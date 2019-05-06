@@ -24,9 +24,6 @@ module.exports = async () => {
     console.log('Ooops', err);
   });
 
-  bot.start(ctx => ctx.reply('Welcome'));
-  bot.help(ctx => ctx.reply('You make me laugh. Go to gulag.'));
-
   floodFeature(bot);
   autoreplyFeature(bot);
 

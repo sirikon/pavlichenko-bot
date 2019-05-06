@@ -15,4 +15,10 @@ module.exports = (bot) => {
     if (!await shared.senderIsAdmin(ctx)) return;
     ctx.reply('https://www.youtube.com/watch?v=U06jlgpMtQs');
   });
+
+  bot.help(async (ctx) => {
+    const userId = ctx.message.from.id;
+    if (ctx.floodService.isUserFlooder(userId)) return;
+    ctx.reply('You make me laugh. Go to gulag.');
+  });
 };

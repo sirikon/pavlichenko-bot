@@ -1,22 +1,15 @@
-const Telegraf = require('telegraf');
-
-const stateStorage = require('./infrastructure/stateStorage');
 const FloodService = require('./services/floodService');
 
 const floodFeature = require('./features/flood');
 const autoreplyFeature = require('./features/autoreply');
 
-module.exports = async () => {
-  const state = {};
-  await stateStorage(state);
-
-  const bot = new Telegraf(process.env.BOT_TOKEN);
-
+module.exports = (bot, state, timeProvider) => {
   bot.use((ctx, next) => {
     if (!state[ctx.chat.id]) {
+      // eslint-disable-next-line no-param-reassign
       state[ctx.chat.id] = {};
     }
-    ctx.floodService = FloodService(state[ctx.chat.id], () => new Date().getTime());
+    ctx.floodService = FloodService(state[ctx.chat.id], timeProvider);
     return next();
   });
 
@@ -26,7 +19,4 @@ module.exports = async () => {
 
   floodFeature(bot);
   autoreplyFeature(bot);
-
-  await bot.launch();
-  console.log('Running');
 };

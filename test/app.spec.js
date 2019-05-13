@@ -80,9 +80,155 @@ describe('Flood Feature', () => {
       ],
     });
   });
+
+  it('should reply a correct summary when asking for flood status', async () => {
+    const state = {
+      chat1: {
+        flood: {
+          config: {
+            limit: 10,
+            window: 60000,
+          },
+          messageStacks: {
+            10: [1, 2, 3, 4, 5, 6],
+            20: [1],
+          },
+          users: [10, 20],
+        },
+      },
+    };
+
+    expect(await sendMessage(state, messageBuilder()
+      .from(1)
+      .command('/flood_status')
+      .group('chat1')
+      .build()))
+      .to.deep.equal(['10_name: 6/10\n20_name: 1/10']);
+  });
+
+  it('should reply an empty summary when no user is flagged as flooder', async () => {
+    const state = {
+      chat1: {
+        flood: {
+          config: {
+            limit: 10,
+            window: 60000,
+          },
+          messageStacks: {},
+          users: [],
+        },
+      },
+    };
+
+    expect(await sendMessage(state, messageBuilder()
+      .from(1)
+      .command('/flood_status')
+      .group('chat1')
+      .build()))
+      .to.deep.equal(['El gulag está vacío :(']);
+  });
+});
+
+describe('Autoreply Feature', () => {
+  it('should reply to some messages when the sender is admin', async () => {
+    const state = {};
+
+    expect(await sendMessage(state, messageBuilder()
+      .from(1)
+      .text('OwO')
+      .group('chat1')
+      .build()))
+      .to.deep.equal(['UwU']);
+
+    expect(await sendMessage(state, messageBuilder()
+      .from(1)
+      .text('shrug')
+      .group('chat1')
+      .build()))
+      .to.deep.equal(['¯\\_(ツ)_/¯']);
+
+    expect(await sendMessage(state, messageBuilder()
+      .from(1)
+      .text('gora la urss')
+      .group('chat1')
+      .build()))
+      .to.deep.equal(['https://www.youtube.com/watch?v=U06jlgpMtQs']);
+  });
+
+  it('should reply to messages in private chats', async () => {
+    const state = {};
+
+    expect(await sendMessage(state, messageBuilder()
+      .from(10)
+      .text('OwO')
+      .privateChat('private1')
+      .build()))
+      .to.deep.equal(['UwU']);
+  });
+
+  it('should not reply to some messages when the sender is not admin', async () => {
+    const state = {};
+
+    expect(await sendMessage(state, messageBuilder()
+      .from(2)
+      .text('OwO')
+      .group('chat1')
+      .build()))
+      .to.deep.equal([]);
+
+    expect(await sendMessage(state, messageBuilder()
+      .from(2)
+      .text('shrug')
+      .group('chat1')
+      .build()))
+      .to.deep.equal([]);
+
+    expect(await sendMessage(state, messageBuilder()
+      .from(2)
+      .text('gora la urss')
+      .group('chat1')
+      .build()))
+      .to.deep.equal([]);
+  });
+
+  it('should reply help to no flooders', async () => {
+    const state = {};
+
+    expect(await sendMessage(state, messageBuilder()
+      .from(1)
+      .command('/help')
+      .group('chat1')
+      .build()))
+      .to.deep.equal(['You make me laugh. Go to gulag.']);
+  });
+
+  it('should not reply help to flooders', async () => {
+    const state = {
+      chat1: {
+        flood: {
+          config: {
+            limit: 10,
+            window: 60000,
+          },
+          messageStacks: {
+            10: [],
+          },
+          users: [10],
+        },
+      },
+    };
+
+    expect(await sendMessage(state, messageBuilder()
+      .from(10)
+      .command('/help')
+      .group('chat1')
+      .build()))
+      .to.deep.equal([]);
+  });
 });
 
 async function buildSUT(state) {
+  const replies = [];
   let resolve = null;
   const endCallback = new Promise((r) => {
     resolve = r;
@@ -90,9 +236,10 @@ async function buildSUT(state) {
   const bot = new Telegraf();
   bot.use(async (ctx, next) => {
     ctx.telegram.getChatAdministrators = () => new Promise(r => r([{ user: { id: 1 } }]));
-    ctx.reply = sinon.fake();
+    ctx.telegram.getChatMember = (_, userId) => new Promise(r => r({ user: { id: userId, first_name: `${userId}_name` } }));
+    ctx.reply = text => replies.push(text);
     await next();
-    resolve();
+    resolve(replies);
   });
   app(bot, state, () => 60);
   return { bot, end: endCallback };
@@ -101,5 +248,6 @@ async function buildSUT(state) {
 async function sendMessage(state, message) {
   const { bot, end } = await buildSUT(state);
   bot.handleUpdate({ message });
-  await end;
+  const result = await end;
+  return result;
 }

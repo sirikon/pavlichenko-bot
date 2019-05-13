@@ -33,6 +33,12 @@ function messageBuilder(message) {
     return messageBuilder(message);
   }
 
+  function privateChat(id) {
+    message.chat.type = 'private';
+    message.chat.id = id;
+    return messageBuilder(message);
+  }
+
   function replyToUser(id) {
     message.reply_to_message = {
       from: {
@@ -50,6 +56,7 @@ function messageBuilder(message) {
     from,
     command,
     group,
+    privateChat,
     replyToUser,
     text,
     build,

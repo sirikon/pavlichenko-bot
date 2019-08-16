@@ -37,7 +37,11 @@ module.exports = (bot) => {
     }
     const userPromises = [];
     Object.keys(status).forEach((userId) => {
-      userPromises.push(ctx.telegram.getChatMember(ctx.chat.id, userId));
+      userPromises.push(ctx.telegram.getChatMember(ctx.chat.id, userId)
+        .then(r => r, (e) => {
+          console.log(e);
+          return userId;
+        }));
     });
     const userResults = await Promise.all(userPromises);
     const text = [];

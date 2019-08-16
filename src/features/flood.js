@@ -28,6 +28,15 @@ module.exports = (bot) => {
     ctx.reply(`${userMention(repliedUser)}, enhorabuena, saliste del gulag.`);
   }
 
+  async function getChatMember(ctx, userId) {
+    try {
+      return await ctx.telegram.getChatMember(ctx.chat.id, userId);
+    } catch (err) {
+      ctx.log.info(`Error while getting chat member: ${err.message}`);
+      return { user: { id: userId } };
+    }
+  }
+
   async function floodStatusCommandHandler(ctx) {
     if (!await shared.senderIsAdmin(ctx)) return;
     const status = ctx.floodService.getStatus();
@@ -37,11 +46,7 @@ module.exports = (bot) => {
     }
     const userPromises = [];
     Object.keys(status).forEach((userId) => {
-      userPromises.push(ctx.telegram.getChatMember(ctx.chat.id, userId)
-        .then(r => r, (e) => {
-          console.log(e);
-          return userId;
-        }));
+      userPromises.push(getChatMember(ctx, userId));
     });
     const userResults = await Promise.all(userPromises);
     const text = [];

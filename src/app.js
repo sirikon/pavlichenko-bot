@@ -1,4 +1,5 @@
 const FloodService = require('./services/floodService');
+const Logger = require('./services/logger');
 
 const floodFeature = require('./features/flood');
 const autoreplyFeature = require('./features/autoreply');
@@ -10,6 +11,7 @@ module.exports = (bot, state, timeProvider) => {
       state[ctx.chat.id] = {};
     }
     ctx.floodService = FloodService(state[ctx.chat.id], timeProvider);
+    ctx.log = Logger();
     return next();
   });
 

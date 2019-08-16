@@ -1,6 +1,5 @@
 /* eslint-disable no-use-before-define */
 const { expect } = require('chai');
-const sinon = require('sinon');
 const Telegraf = require('telegraf');
 
 const app = require('../src/app');
@@ -104,6 +103,32 @@ describe('Flood Feature', () => {
       .group('chat1')
       .build()))
       .to.deep.equal(['10_name: 6/10\n20_name: 1/10']);
+  });
+
+  it('should resist a failing user when asking for flood status', async () => {
+    const state = {
+      chat1: {
+        flood: {
+          config: {
+            limit: 10,
+            window: 60000,
+          },
+          messageStacks: {
+            0: [1, 2, 3, 4, 5, 6],
+            10: [1, 2, 3, 4, 5, 6],
+            20: [1],
+          },
+          users: [0, 10, 20],
+        },
+      },
+    };
+
+    expect(await sendMessage(state, messageBuilder()
+      .from(1)
+      .command('/flood_status')
+      .group('chat1')
+      .build()))
+      .to.deep.equal(['0: 6/10\n10_name: 6/10\n20_name: 1/10']);
   });
 
   it('should reply an empty summary when no user is flagged as flooder', async () => {
@@ -236,7 +261,12 @@ async function buildSUT(state) {
   const bot = new Telegraf();
   bot.use(async (ctx, next) => {
     ctx.telegram.getChatAdministrators = () => new Promise(r => r([{ user: { id: 1 } }]));
-    ctx.telegram.getChatMember = (_, userId) => new Promise(r => r({ user: { id: userId, first_name: `${userId}_name` } }));
+    ctx.telegram.getChatMember = (_, userId) => new Promise((res, rej) => {
+      if (userId === '0') {
+        return rej(new Error('Failed getting username'));
+      }
+      return res({ user: { id: userId, first_name: `${userId}_name` } });
+    });
     ctx.reply = text => replies.push(text);
     await next();
     resolve(replies);

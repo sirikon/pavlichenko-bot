@@ -1,6 +1,7 @@
-const Telegraf = require('telegraf');
-const stateStorage = require('./src/infrastructure/stateStorage');
-const app = require('./src/app');
+import Telegraf from 'telegraf';
+
+const stateStorage = require('./infrastructure/stateStorage');
+const app = require('./app');
 
 async function main() {
   const state = {};

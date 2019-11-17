@@ -2,13 +2,12 @@ version: '2'
 
 services:
 
-  gulagbot:
-    image: gulagbot
+  pavlichenko-bot:
+    image: pavlichenko-bot
     restart: always
     build:
-      context: .
+      context: ../app
+      dockerfile: ../docker/Dockerfile
     environment:
       - BOT_TOKEN=${BOT_TOKEN}
       - DATA_FOLDER=/data
-    volumes:
-      - "./data:/data"

@@ -1,4 +1,4 @@
-<center>
+<p align="center">
     <img src="./assets/pav.png" width="250" />
-    <h1>Pavlichenko Bot</h1>
-</center>
+</p>
+<h1 align="center">Pavlichenko Bot</h1>

@@ -1,3 +1,4 @@
 /.env
+/data
 /app/node_modules
 /app/data.json

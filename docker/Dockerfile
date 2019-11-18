@@ -6,4 +6,4 @@ RUN npm i --production
 COPY ./src ./src
 
 ENV DATA_FOLDER /data
-CMD npm start
+CMD npm run start:prod

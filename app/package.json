@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "start": "export $(cat ../.env | xargs) && ts-node src/main.ts",
+    "start:prod": "ts-node src/main.ts",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "test": "nyc --reporter=html mocha"

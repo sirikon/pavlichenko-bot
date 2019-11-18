@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"esModuleInterop": true,
+		"target": "es2017",
+		"module": "commonjs",
+		"outDir": "out",
+		"rootDir": ".",
+		"typeRoots": ["./typings"]
+	},
+	"exclude": [
+		"node_modules"
+	]
+}

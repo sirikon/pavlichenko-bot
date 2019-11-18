@@ -1,0 +1,43 @@
+{
+	"defaultSeverity": "error",
+	"extends": [
+		"tslint:recommended"
+	],
+	"jsRules": {
+		"indent": [
+			true,
+			"tabs",
+			4
+		],
+		"quotemark": [
+			true,
+			"single",
+			4
+		],
+		"semicolon": [
+			true
+		],
+		"object-literal-sort-keys": [
+			false
+		]
+	},
+	"rules": {
+		"indent": [
+			true,
+			"tabs",
+			4
+		],
+		"quotemark": [
+			true,
+			"single",
+			4
+		],
+		"semicolon": [
+			true
+		],
+		"object-literal-sort-keys": [
+			false
+		]
+	},
+	"rulesDirectory": []
+}

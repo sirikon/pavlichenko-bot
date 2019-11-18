@@ -1,14 +1,25 @@
 import Telegraf from 'telegraf';
 
-const stateStorage = require('./infrastructure/stateStorage');
-const app = require('./app');
+import stateStorage from './infrastructure/stateStorage';
+
+import app from './app';
+import IContext from './models/context';
 
 async function main() {
-  const state = {};
-  const bot = new Telegraf(process.env.BOT_TOKEN);
-  await stateStorage(state);
-  app(bot, state, () => new Date().getTime());
-  await bot.launch();
+	const state = {};
+	const bot = new Telegraf<IContext>(getBotToken());
+	await stateStorage(state);
+	app(bot, state, () => new Date().getTime());
+	await bot.launch();
 }
 
-main().then(() => {}, err => console.log(err));
+function getBotToken(): string {
+	const botToken = process.env.BOT_TOKEN;
+	if (!botToken) {
+		throw new Error('Environment variable BOT_TOKEN is required.');
+	}
+	return botToken;
+}
+
+// tslint:disable-next-line: no-console
+main().then(() => { /**/ }, (err) => console.log(err));

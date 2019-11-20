@@ -27,8 +27,10 @@ export default (bot: Telegraf<IContext>) => {
 
 		if (ctx.message.text.toLowerCase() === 'basta!') {
 			ctx.reply(randomTableFlip());
+		} else {
+			next!();
 		}
-	})
+	});
 
 	bot.help(async (ctx, next) => {
 		if (messageSenderIsFlooder(ctx)) { return next!(); }
@@ -38,7 +40,6 @@ export default (bot: Telegraf<IContext>) => {
 	function messageSenderIsFlooder(ctx: IContext) {
 		if (!ctx.message) { return false; }
 		if (!ctx.message.from) { return false; }
-
 		const userId = ctx.message.from.id;
 		return ctx.floodService.isUserFlooder(userId);
 	}
@@ -49,7 +50,7 @@ export default (bot: Telegraf<IContext>) => {
 			'┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻',
 			'(ノ°Д°）ノ︵ ┻━┻',
 			'┻━┻ ︵ ლ(⌒-⌒ლ)',
-			'ノ┬─┬ノ ︵ ( \\o°o)\\'
+			'ノ┬─┬ノ ︵ ( \\o°o)\\',
 		];
 		const index = Math.round(Math.random() * (tableFlips.length - 1));
 		return tableFlips[index];

@@ -64,7 +64,7 @@ export default class FloodService {
 	}
 
 	private getUserMessageStack(userId: number) {
-		const state = this.getState()
+		const state = this.getState();
 		if (!state.messageStacks[userId]) {
 			state.messageStacks[userId] = [];
 		}

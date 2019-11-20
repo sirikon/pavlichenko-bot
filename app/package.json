@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "start": "export $(cat ../.env | xargs) && ts-node src/main.ts",
-    "start:prod": "ts-node src/main.ts",
     "build": "tsc -p .",
+    "lint": "tslint -p .",
     "test": "mocha -r ts-node/register test/*.ts"
   },
   "repository": {

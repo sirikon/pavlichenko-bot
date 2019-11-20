@@ -26,13 +26,7 @@ export default (bot: Telegraf<IContext>) => {
 		if (!ctx.message.text) { return next!(); }
 
 		if (ctx.message.text.toLowerCase() === 'basta!') {
-			ctx.reply([
-				'(╯°д°）╯︵/(.□ . \\)',
-				'┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻',
-				'(ノ°Д°）ノ︵ ┻━┻',
-				'┻━┻ ︵ ლ(⌒-⌒ლ)',
-				'ノ┬─┬ノ ︵ ( \\o°o)\\'
-			][Math.round(Math.random() * 4)]);
+			ctx.reply(randomTableFlip());
 		}
 	})
 
@@ -47,6 +41,18 @@ export default (bot: Telegraf<IContext>) => {
 
 		const userId = ctx.message.from.id;
 		return ctx.floodService.isUserFlooder(userId);
+	}
+
+	function randomTableFlip(): string {
+		const tableFlips = [
+			'(╯°д°）╯︵/(.□ . \\)',
+			'┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻',
+			'(ノ°Д°）ノ︵ ┻━┻',
+			'┻━┻ ︵ ლ(⌒-⌒ლ)',
+			'ノ┬─┬ノ ︵ ( \\o°o)\\'
+		];
+		const index = Math.round(Math.random() * (tableFlips.length - 1));
+		return tableFlips[index];
 	}
 
 };

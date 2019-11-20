@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-function messageBuilder(message) {
+export default function messageBuilder(message?: any) {
   message = message || {
     chat: {},
     text: '',
@@ -7,12 +7,12 @@ function messageBuilder(message) {
     from: {},
   };
 
-  function text(_text) {
+  function text(_text: string) {
     message.text = _text;
     return messageBuilder(message);
   }
 
-  function command(_text) {
+  function command(_text: any) {
     message.text = _text;
     message.entities.push({
       length: _text.length,
@@ -22,24 +22,24 @@ function messageBuilder(message) {
     return messageBuilder(message);
   }
 
-  function from(id) {
+  function from(id: any) {
     message.from.id = id;
     return messageBuilder(message);
   }
 
-  function group(id) {
+  function group(id: any) {
     message.chat.type = 'group';
     message.chat.id = id;
     return messageBuilder(message);
   }
 
-  function privateChat(id) {
+  function privateChat(id: any) {
     message.chat.type = 'private';
     message.chat.id = id;
     return messageBuilder(message);
   }
 
-  function replyToUser(id) {
+  function replyToUser(id: any) {
     message.reply_to_message = {
       from: {
         id,
@@ -62,5 +62,3 @@ function messageBuilder(message) {
     build,
   };
 }
-
-module.exports = messageBuilder;

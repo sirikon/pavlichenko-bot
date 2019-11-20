@@ -6,9 +6,12 @@
 		"module": "commonjs",
 		"outDir": "out",
 		"rootDir": ".",
-		"typeRoots": ["./typings"]
+		"typeRoots": [
+			"./typings"
+		]
 	},
 	"exclude": [
-		"node_modules"
+		"node_modules",
+		"test"
 	]
 }

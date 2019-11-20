@@ -1,13 +1,16 @@
 /* eslint-disable no-use-before-define */
-const { expect } = require('chai');
-const Telegraf = require('telegraf');
+import 'mocha';
+import Telegraf from 'telegraf';
+import { expect } from 'chai';
 
-const app = require('../src/app');
-const messageBuilder = require('./utils/messageBuilder');
+import app from '../src/app';
+import messageBuilder from './utils/messageBuilder';
+import IContext from '../src/models/context';
+import { Message } from 'telegram-typings';
 
 describe('Flood Feature', () => {
   it('should be able to flag a user as a flooder', async () => {
-    const state = {};
+    const state: any = {};
 
     await sendMessage(state, messageBuilder()
       .from(1)
@@ -29,7 +32,7 @@ describe('Flood Feature', () => {
   });
 
   it('should be able to un-flag a user as a flooder', async () => {
-    const state = {};
+    const state: any = {};
 
     await sendMessage(state, messageBuilder()
       .from(1)
@@ -49,7 +52,7 @@ describe('Flood Feature', () => {
   });
 
   it('should store a flooders message when sended', async () => {
-    const state = {};
+    const state: any = {};
 
     await sendMessage(state, messageBuilder()
       .from(1)
@@ -252,32 +255,32 @@ describe('Autoreply Feature', () => {
   });
 });
 
-async function buildSUT(state) {
-  const replies = [];
-  let resolve = null;
+async function buildSUT(state: any) {
+  const replies: Array<any> = [];
+  let resolve: any = null;
   const endCallback = new Promise((r) => {
     resolve = r;
   });
-  const bot = new Telegraf();
+  const bot = new Telegraf<IContext>('', {});
   bot.use(async (ctx, next) => {
-    ctx.telegram.getChatAdministrators = () => new Promise(r => r([{ user: { id: 1 } }]));
-    ctx.telegram.getChatMember = (_, userId) => new Promise((res, rej) => {
-      if (userId === '0') {
+    ctx.telegram.getChatAdministrators = () => new Promise(r => r([{ user: { id: 1, first_name: '', is_bot: false }, status: '' }]));
+    ctx.telegram.getChatMember = (_, userId: any) => new Promise((res, rej) => {
+      if (userId.toString() === '0') {
         return rej(new Error('Failed getting username'));
       }
-      return res({ user: { id: userId, first_name: `${userId}_name` } });
+      return res({ user: { id: userId, first_name: `${userId}_name`, is_bot: false }, status: '' });
     });
-    ctx.reply = text => replies.push(text);
-    await next();
+    ctx.reply = (text) => { replies.push(text); return new Promise<Message>(() => { }); }
+    await next!();
     resolve(replies);
   });
   app(bot, state, () => 60);
   return { bot, end: endCallback };
 }
 
-async function sendMessage(state, message) {
+async function sendMessage(state: any, message: any) {
   const { bot, end } = await buildSUT(state);
-  bot.handleUpdate({ message });
+  bot.handleUpdate({ message, update_id: 1 });
   const result = await end;
   return result;
 }

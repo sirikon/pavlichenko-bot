@@ -6,8 +6,6 @@
     "start": "export $(cat ../.env | xargs) && ts-node src/main.ts",
     "start:prod": "ts-node src/main.ts",
     "build": "tsc -p .",
-    "lint": "eslint .",
-    "lint:fix": "npm run lint -- --fix",
     "test": "mocha -r ts-node/register test/*.ts"
   },
   "repository": {

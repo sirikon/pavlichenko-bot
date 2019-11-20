@@ -27,7 +27,7 @@ export default (bot: Telegraf<IContext>) => {
 
 		if (ctx.message.text.toLowerCase() === 'basta!') {
 			ctx.reply([
-				'(╯°д°）╯︵/(.□ . \)',
+				'(╯°д°）╯︵/(.□ . \\)',
 				'┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻',
 				'(ノ°Д°）ノ︵ ┻━┻',
 				'┻━┻ ︵ ლ(⌒-⌒ლ)',

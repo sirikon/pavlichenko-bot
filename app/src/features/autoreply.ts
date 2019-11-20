@@ -32,7 +32,7 @@ export default (bot: Telegraf<IContext>) => {
 				'(ノ°Д°）ノ︵ ┻━┻',
 				'┻━┻ ︵ ლ(⌒-⌒ლ)',
 				'ノ┬─┬ノ ︵ ( \\o°o)\\'
-			][Math.round(Math.random() * 5)]);
+			][Math.round(Math.random() * 4)]);
 		}
 	})
 

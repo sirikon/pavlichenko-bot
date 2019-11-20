@@ -38,7 +38,10 @@ export default (bot: Telegraf<IContext>) => {
 		try {
 			return (await ctx.telegram.getChatMember(ctx.chat.id, userId)).user;
 		} catch (err) {
-			ctx.log.info(`Error while getting chat member: ${err.message}`);
+			ctx.log.warn('Error while getting chat member', {
+				errorMessage: err.message,
+				userId,
+			});
 			return { id: userId, first_name: userId.toString(), is_bot: false };
 		}
 	}

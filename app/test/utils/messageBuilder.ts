@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 export default function messageBuilder(message?: any) {
 	message = message || {
 		chat: {},

@@ -9,24 +9,28 @@ import floodFeature from './features/flood';
 import { IRootState } from './models/state';
 
 export default (bot: Telegraf<IContext>, state: IRootState, timeProvider: () => number) => {
+
+	const logger = new Logger();
+
 	bot.use((ctx, next) => {
 		if (ctx.chat) {
 			if (!state[ctx.chat.id]) {
-				// eslint-disable-next-line no-param-reassign
 				state[ctx.chat.id] = {};
 			}
 			ctx.floodService = new FloodService(state[ctx.chat.id], timeProvider);
 		}
 
-		ctx.log = new Logger();
+		ctx.log = logger;
 		return next!();
 	});
 
 	bot.catch((err: Error) => {
-		// tslint:disable-next-line: no-console
-		console.log('Ooops', err);
+		logger.error('Unexpected error', {
+			err,
+		});
 	});
 
 	floodFeature(bot);
 	autoreplyFeature(bot);
+
 };

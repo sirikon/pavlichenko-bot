@@ -32,6 +32,18 @@ export default (bot: Telegraf<IContext>) => {
 		}
 	});
 
+	bot.on('message', (ctx, next) => {
+		if (messageSenderIsFlooder(ctx)) { return next!(); }
+		if (!ctx.message) { return next!(); }
+		if (!ctx.message.text) { return next!(); }
+
+		if (findBroKeywords(ctx.message.text)) {
+			ctx.reply('di que si, bro');
+		} else {
+			next!();
+		}
+	});
+
 	bot.help(async (ctx, next) => {
 		if (messageSenderIsFlooder(ctx)) { return next!(); }
 		ctx.reply('You make me laugh. Go to gulag.');
@@ -54,6 +66,23 @@ export default (bot: Telegraf<IContext>) => {
 		];
 		const index = Math.round(Math.random() * (tableFlips.length - 1));
 		return tableFlips[index];
+	}
+
+	function findBroKeywords(text: string) {
+		let found = false;
+		const broKeywords = [
+			'imperio',
+			'guateque',
+			'4latas',
+			'4 latas',
+			'rulillas',
+		];
+		broKeywords.forEach((keyword) => {
+			if (text.indexOf(keyword) >= 0) {
+				found = true;
+			}
+		});
+		return found;
 	}
 
 };

@@ -78,7 +78,7 @@ export default (bot: Telegraf<IContext>) => {
 			'rulillas',
 		];
 		broKeywords.forEach((keyword) => {
-			if (text.indexOf(keyword) >= 0) {
+			if (text.toLowerCase().indexOf(keyword) >= 0) {
 				found = true;
 			}
 		});

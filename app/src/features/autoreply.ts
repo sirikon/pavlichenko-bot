@@ -26,7 +26,7 @@ export default (bot: Telegraf<IContext>) => {
 		if (!ctx.message.text) { return next!(); }
 
 		if (ctx.message.text.toLowerCase() === 'gracias pav') {
-			ctx.reply('A mandar 😉');
+			ctx.reply('A mandar, Товарищ 😉');
 		} else {
 			next!();
 		}

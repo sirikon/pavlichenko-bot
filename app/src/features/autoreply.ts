@@ -25,6 +25,18 @@ export default (bot: Telegraf<IContext>) => {
 		if (!ctx.message) { return next!(); }
 		if (!ctx.message.text) { return next!(); }
 
+		if (ctx.message.text.toLowerCase() === 'gracias pav') {
+			ctx.reply('A mandar 😉');
+		} else {
+			next!();
+		}
+	});
+
+	bot.on('message', (ctx, next) => {
+		if (messageSenderIsFlooder(ctx)) { return next!(); }
+		if (!ctx.message) { return next!(); }
+		if (!ctx.message.text) { return next!(); }
+
 		if (ctx.message.text.toLowerCase() === 'basta!') {
 			ctx.reply(randomTableFlip());
 		} else {

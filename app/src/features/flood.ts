@@ -20,7 +20,7 @@ export default (bot: Telegraf<IContext>) => {
 		if (!repliedUser) { return; }
 
 		ctx.floodService.flagUserAsFlooder(repliedUser.id, true);
-		ctx.reply(`${userMention(repliedUser)}, se te ha enviado al Gulag por incumplimiento de las normas sobre el abuso de flood. Tienes restrigidos tus mensajes a 50 diarios. Úsalos bien.`);
+		ctx.reply(`${userMention(repliedUser)}, se te ha enviado al Gulag por incumplimiento de las normas sobre el abuso de flood. Tienes restrigidos tus mensajes a ${ctx.floodService.getMessageLimit()} diarios. Úsalos bien.`);
 	}
 
 	async function unfloodCommandHandler(ctx: IContext) {

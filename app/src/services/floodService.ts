@@ -36,6 +36,10 @@ export default class FloodService {
 		return this.getState().config.limit;
 	}
 
+	public setMessageLimit(limit: number) {
+		this.getState().config.limit = limit;
+	}
+
 	public addMessageAndCheck(userId: number) {
 		const state = this.getState();
 		this.deleteOutOfWindowMessagesFromUserStack(userId);

@@ -1,5 +1,5 @@
 export interface IRootState {
-	[userId: number]: IState;
+	[chatId: number]: IState;
 }
 
 export interface IState {

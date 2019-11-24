@@ -220,16 +220,16 @@ describe('Autoreply Feature', () => {
 			.to.deep.equal([]);
 	});
 
-	it('should reply help to no flooders', async () => {
-		const state = {};
+	// it('should reply help to no flooders', async () => {
+	// 	const state = {};
 
-		expect(await sendMessage(state, messageBuilder()
-			.from(1)
-			.command('/help')
-			.group('chat1')
-			.build()))
-			.to.deep.equal(['You make me laugh. Go to gulag.']);
-	});
+	// 	expect(await sendMessage(state, messageBuilder()
+	// 		.from(1)
+	// 		.command('/help')
+	// 		.group('chat1')
+	// 		.build()))
+	// 		.to.deep.equal(['You make me laugh. Go to gulag.']);
+	// });
 
 	it('should not reply help to flooders', async () => {
 		const state = {

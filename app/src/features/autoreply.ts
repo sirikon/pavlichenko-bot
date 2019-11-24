@@ -1,4 +1,4 @@
-import Telegraf from 'telegraf';
+import Telegraf, { Extra } from 'telegraf';
 
 import IContext from '../models/context';
 import { senderIsAdmin } from './shared';
@@ -57,8 +57,19 @@ export default (bot: Telegraf<IContext>) => {
 	});
 
 	bot.help(async (ctx, next) => {
-		if (messageSenderIsFlooder(ctx)) { return next!(); }
-		ctx.reply('You make me laugh. Go to gulag.');
+		if (!await senderIsAdmin(ctx)) { return next!(); }
+		ctx.replyWithMarkdown([
+			'Saludos Товарищ. Soy *Pavlichenko* y aceptaré las siguientes órdenes:',
+			'',
+			'*Flooders*',
+			'/flood -> Responde con esto un mensaje, y marcaré como flooder a quien lo envió.',
+			'/unflood -> Igual, pero para sacar del listado de flooders.',
+			'/flood\\_status -> Un resumen del listado de flooders.',
+			'',
+			'*Configuración*',
+			'/config\\_flood\\_limit -> Obtener el límite de mensajes actual para flooders.',
+			'/config\\_flood\\_limit <número> -> Actualizar el límite de mensajes actual para flooders.',
+		].join('\n'));
 	});
 
 	function messageSenderIsFlooder(ctx: IContext) {
